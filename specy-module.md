@@ -91,9 +91,9 @@ message Executor {
 	//该executor质押的token数量
 	cosmos.base.v1beta1.Coin staking=2;
 	//executor运行所在sgx enclave的远程认证报告
-  string iasAttestatioReport = 3; 
-  //executor运行所在sgx enclave 公钥
-  string enclavePK = 4; 
+    string iasAttestatioReport = 3; 
+    //executor运行所在sgx enclave 公钥
+    string enclavePK = 4; 
 }
 ```
 
@@ -155,8 +155,8 @@ message Task{
 	string method=2;
 	//以json的形式对对应的参数值进行预定义,如果有则预设，如果没有则空
 	string calldata=3;
-	//task 所属类别
-	string type=4;
+	//task 是否为单次执行
+	bool single=4;
 	string rule_file=5;
 }
 ```
