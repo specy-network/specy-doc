@@ -30,7 +30,7 @@ Specy Module is an on chain module implemented by Specy Network, responsible for
 
   - [Tasks](###Tasks)
 
-  - [Deposits](###Deposit)
+  - [Deposits](###Deposits)
 
     
 
@@ -48,7 +48,7 @@ Specy Module is an on chain module implemented by Specy Network, responsible for
   - MsgExecutorUnDelegate
   - MsgDeposit
   - MsgUnDeposit
-  - MsgExecuteTask
+  - [MsgExecuteTask](###MsgExecuteTask)
 
 - Begin-Block
 
@@ -161,9 +161,22 @@ message Task{
 }
 ```
 
+calldata说明举例
+```json
+{
+	"params":[
+		{"value":"canshudezhi"},
+		{"value":},
+	],
+	"index":1
+	
+}
+```
+index指定参数中第几个值需要engine填充
 
 
-### Deposit
+
+### Deposits
 
 用户需要在模块中提前deposit一定数量token用于支付gas费和手续费，deposit的金额将被send到模块账户中。在创建和执行任务时，按照params中定义的参数从模块账户转移至executor，并减少task所有者的deposit额度。deposit对应的token denom与params中设定的boned_denom相同。
 
@@ -176,5 +189,75 @@ message Deposit{
 	//额度
 	int64 amount=2;
 }
+```
+
+## State Transitions
+
+### Staking
+### UpdateCurrentExecutor
+
+## Messages
+
+### MsgCreateTask
+
+### MsgCreateTask
+### MsgCancelTask
+### MsgCreateExecutor
+### MsgExecutorDelegate
+### MsgExecutorUnDelegate
+### MsgDeposit
+### MsgUnDeposit
+### MsgExecuteTask
+该msg用于在满足条件时触发链上module对task的执行，请求参数包括：Task的hash（即id）、参数(calldata)两个部分
+```shell
+stargazed tx specy execute-task sakfdhkajffdhkjsafkjd "{\"params\":[\"value\":20]}"
+```
+
+## Begin-Block
+
+## End-Block
+
+## Hooks
+
+## Events
+
+### Msg's
+
+- CreateTask:
+创建Task时产生的event，executor需关注。
+```go
+ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			//event的类别为"create_task"
+			types.EventTypeCreateTask,
+			//任务的主键hash
+			sdk.NewAttribute(types.AttributeKeyTaskHash, string(taskHash)),
+			//合约地址或模块名称
+			sdk.NewAttribute(types.AttributeKeyContractAddress, msg.ContractAddress),
+			//task所需要调用的合约方法或模块hook函数
+			sdk.NewAttribute(types.AttributeKeyMethod, msg.Method),
+			//任务的schema,json形式
+			sdk.NewAttribute(types.AttributeKeyCalldata, msg.Calldata),
+			//任务是否为单次执行
+			sdk.NewAttribute(types.AttributeKeySingle, strconv.FormatBool(msg.Single)),
+			//约束内容
+			sdk.NewAttribute(types.AttributeKeyRuleFile, msg.RuleFile),
+			//task 创建者
+			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+		),
+	})
+```
+
+- CancleTask:
+取消Task时产生的event，executor需关注。
+```go
+ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			//event的类别为"cancle_task"
+			types.EventTypeCancleTask,
+			//任务的主键hash
+			sdk.NewAttribute(types.AttributeKeyTaskHash, string(taskHash)),
+		),
+	})
 ```
 
