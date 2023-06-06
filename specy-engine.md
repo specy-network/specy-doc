@@ -66,3 +66,27 @@ message TaskResponse {
     bytes signature = 4;
 }
 ```
+
+## Script Language Example
+
+```
+regulation nft_reward 
+    entities {
+        entity interchainnft {
+            hash  
+            sender  
+            receiver  
+            class_id  
+            tocken_id  
+            timestamp 
+        }  
+    } 
+    rules {
+        rule nft_white_list {
+            count on interchainnft 
+            where interchainnft.token_id in nft_reward_list 
+            after 2023-01-01T00:00:00+08:00 
+            within 1 days
+        }
+    }
+```
