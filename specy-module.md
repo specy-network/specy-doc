@@ -208,9 +208,9 @@ message Deposit{
 ### MsgDeposit
 ### MsgUnDeposit
 ### MsgExecuteTask
-该msg用于在满足条件时触发链上module对task的执行，请求参数包括：Task的hash（即id）、参数(calldata)两个部分
+该msg用于在满足条件时触发链上module对task的执行，请求参数包括：Task的hash（即id）、参数(calldata)、rule_file_hash、signature四个部分
 ```shell
-stargazed tx specy execute-task sakfdhkajffdhkjsafkjd "{\"params\":[\"value\":20]}"
+stargazed tx specy execute-task taskhash "{\"params\":[20],\"index\":1}" rufilehash  signature
 ```
 
 ## Begin-Block
